@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Road to Consolidation</title><meta name="description" content="A comparative government board game: Mexico and Nigeria">
+<style>
+:root{--bg:#e9eef2;--card:#fff;--ink:#14232f;--mut:#566673;--line:#cdd7de;--dem:#1f8a5b;--bak:#c43d34;--chn:#c98d0a;--navy:#17324a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a24;--card:#192836;--ink:#eaf0f4;--mut:#9fb0bd;--line:#2c3f50;--navy:#0b2236;--dem:#38b583;--bak:#ef6a60;--chn:#e8b03a}}
+:root[data-theme="dark"]{--bg:#0f1a24;--card:#192836;--ink:#eaf0f4;--mut:#9fb0bd;--line:#2c3f50;--navy:#0b2236;--dem:#38b583;--bak:#ef6a60;--chn:#e8b03a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Avenir Next",Avenir,"Trebuchet MS",system-ui,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;margin:0}
+header{background:var(--navy);color:#fff;padding:12px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+header h1{font-size:1.5rem;flex:1;min-width:200px}header small{display:block;font:.8rem system-ui;opacity:.75}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:10px 16px;background:var(--navy);color:#fff;font-weight:600;min-height:44px}
+header button{background:rgba(255,255,255,.14)}button:disabled{opacity:.45}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--chn);outline-offset:2px}
+main{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(290px,1fr);gap:14px;padding:14px;max-width:1300px;margin:auto}
+@media(max-width:860px){main{grid-template-columns:1fr}}
+.board{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,1fr);gap:6px}
+.cell{background:var(--card);border:2px solid var(--line);border-radius:10px;padding:5px 6px;min-height:96px;font-size:.72rem;line-height:1.2;display:flex;flex-direction:column;gap:3px;position:relative}
+.cell b{font-size:.68rem;color:var(--mut)}.cell.d{border-color:var(--dem)}.cell.b{border-color:var(--bak)}.cell.c{border-color:var(--chn);background:repeating-linear-gradient(135deg,transparent 0 8px,rgba(201,141,10,.12) 8px 16px),var(--card)}
+.cell.s,.cell.f{background:var(--navy);color:#fff;border-color:var(--navy)}.cell.s b,.cell.f b{color:#cfe0ee}.cell.f{border-color:var(--chn)}
+.tks{margin-top:auto;display:flex;flex-wrap:wrap;gap:2px}
+.tk{width:24px;height:24px;border-radius:50%;border:2px solid #fff;color:#fff;font-size:.72rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.side{display:flex;flex-direction:column;gap:12px}
+#wheelbox{position:relative;width:210px;height:220px;margin:0 auto}
+#wheel{width:200px;height:200px;margin-top:16px;transition:transform 2.3s cubic-bezier(.12,.7,.15,1)}
+#ptr{position:absolute;left:92px;top:0;width:0;height:0;border:9px solid transparent;border-top:22px solid var(--ink);border-bottom:0}
+.pl{border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-top:8px}.pl.on{border-color:var(--chn);box-shadow:0 0 0 3px rgba(201,141,10,.25)}.pl.out{opacity:.45}
+.pl h3{font-size:1rem;display:flex;gap:6px;align-items:center}.pl small{color:var(--mut)}
+.st{display:grid;grid-template-columns:22px 1fr 22px;gap:6px;align-items:center;font-size:.78rem}.bar{height:8px;background:var(--line);border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--dem);transition:width .5s}
+.tot{height:10px;background:var(--line);border-radius:6px;position:relative;margin-top:6px}.tot i{display:block;height:100%;border-radius:6px;background:var(--navy);transition:width .5s}.tot u{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--chn)}
+.modal{position:fixed;inset:0;background:rgba(5,15,25,.65);display:flex;align-items:center;justify-content:center;padding:14px;z-index:9;overflow:auto}.modal[hidden]{display:none}
+.mc{background:var(--card);border-radius:16px;max-width:620px;width:100%;max-height:92%;overflow:auto;padding:20px}
+.mc h2{font-size:1.5rem;margin:6px 0}.pill{display:inline-block;padding:3px 10px;border-radius:20px;color:#fff;font-weight:700;font-size:.82rem}.pill.d{background:var(--dem)}.pill.b{background:var(--bak)}.pill.c{background:var(--chn)}
+.chip{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 8px;margin:2px;font-size:.8rem}
+.fx{margin:10px 0;font-weight:700}.fx span{margin-right:10px}.up{color:var(--dem)}.dn{color:var(--bak)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:6px 0}input,select{font:inherit;padding:9px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:44px}
+.ix p{margin:2px 0 10px;font-size:.92rem}.ix h3{font-size:1rem;margin-top:8px}.big{width:100%;margin-top:12px}
+</style></head><body>
+<header><h1>Road to Consolidation<small>Take your regime from authoritarian government to democratic consolidation</small></h1><button id="bR">Rules</button><button id="bI">Index &amp; Works Cited</button></header>
+<main><section><div class="board" id="board" aria-label="Game board"></div></section>
+<aside class="side"><div class="panel" style="text-align:center"><div id="who" style="font-weight:700;margin-bottom:4px">Set up a game to begin</div><div id="wheelbox"><div id="ptr"></div><svg id="wheel" viewBox="0 0 200 200"></svg></div><div id="res" style="min-height:24px;color:var(--mut)"></div><button class="big" id="spin" disabled>Spin the wheel</button></div><div class="panel"><h3>Players</h3><div id="pls"></div></div></aside></main>
+<div class="modal" id="modal" hidden><div class="mc" id="mc"></div></div>
+<script>
+const $=s=>document.querySelector(s),sleep=t=>new Promise(r=>setTimeout(r,t)),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ST=['Legitimacy','Sovereignty','Civil Society','Rule of Law'],IC=['🏛️','🛡️','🤝','⚖️'],F=29,T=22,LOSE=4,COL=['#e63946','#2a9d8f','#e9a820','#7b5cff'],FL={MX:'🇲🇽 Mexico',NG:'🇳🇬 Nigeria'};
+const REG={mil:{n:'Military Junta',e:'Like Nigeria, 1966–79 and 1983–99',s:[2,5,1,2]},one:{n:'Dominant-Party Regime',e:"Like Mexico's PRI, 1929–2000",s:[4,4,2,2]},per:{n:'Personalist Dictatorship',e:'Like Nigeria under Abacha, 1993–98',s:[2,4,1,1]}};
+// [country, year, short title, kind d/b, spaces to move, [Leg,Sov,Civ,Law], explanation, terms]
+const E=[
+['NG','1960','Independence','d',1,[1,2,0,0],'Nigeria gained independence from Britain in 1960 under a federal system of three regions. Sovereignty was secured, but regional and ethnic cleavages (Hausa-Fulani, Yoruba, Igbo) left the new state fragile.','sovereignty, federalism, social cleavages'],
+['MX','1977','Electoral reform','d',1,[1,0,1,0],'The PRI government let more opposition parties register and added proportional-representation seats in the Chamber of Deputies. Opposition parties gained a legal voice inside a dominant-party system.','dominant-party system, electoral reform'],
+['NG','1966–70','Coups and Biafra war','b',-3,[-1,-2,0,-1],'Military coups in 1966 and the Biafran Civil War (1967–70) showed civilian institutions could not manage ethnic and regional conflict. The military became a central political actor and the state nearly broke apart.','coup d\'état, secession, social cleavages'],
+['MX','1968','Tlatelolco massacre','b',-2,[-2,0,-1,-1],'Security forces killed student protesters in Mexico City just before the 1968 Olympics, and the government denied responsibility. The repression exposed the limits of tolerated dissent under PRI rule and damaged its legitimacy.','repression, legitimacy, civil society'],
+['NG','1979','Return to civilian rule','d',2,[1,0,1,1],'The military handed power to an elected civilian government under a new US-style presidential constitution. The constitution also used "federal character" rules to balance ethnic groups, and Shehu Shagari became president.','presidential system, federal character'],
+['MX','1988','Disputed election','b',-2,[-2,0,0,-1],'Carlos Salinas (PRI) was declared winner after the vote-counting system failed during the count against Cuauhtémoc Cárdenas. Many Mexicans believed fraud occurred, which eroded trust in elections.','electoral fraud, legitimacy'],
+['NG','1983','Buhari coup','b',-3,[-1,0,-1,-2],'The military overthrew the elected Shagari government after flawed 1983 elections and corruption scandals. Rule by decree replaced the constitution, ending the Second Republic.','coup d\'état, rule by decree, corruption'],
+['MX','1996','Independent electoral body','d',2,[1,0,1,2],'A major reform made the Federal Electoral Institute (IFE) independent from the executive and run by citizen councillors. Fairer election administration was a key step toward real party competition.','free and fair elections, institutions'],
+['NG','1993','June 12 annulled','b',-3,[-3,0,-1,-1],'General Babangida annulled the June 1993 presidential election, which M.K.O. Abiola was widely believed to have won. Cancelling a transition at the finish line destroyed trust in the military\'s promises.','electoral annulment, legitimacy'],
+['MX','1994','Zapatista uprising','d',1,[0,0,2,0],'The EZLN, an indigenous movement in Chiapas, rose up in 1994 against marginalization of indigenous communities. It put democracy and inclusion on the national agenda and energized civil society.','civil society, social movements, inclusion'],
+['NG','1995','Saro-Wiwa executed','b',-2,[-2,0,-1,-1],'The Abacha regime executed Ogoni activist Ken Saro-Wiwa after a flawed trial for protesting oil damage in the Niger Delta. The world condemned the killing and the Commonwealth suspended Nigeria.','repression, rentier state, human rights'],
+['MX','1997','PRI loses Congress','d',2,[1,0,0,1],'In 1997 the PRI lost its majority in the Chamber of Deputies for the first time, and Mexico City elected its own mayor. Power was now shared and the president could be checked.','divided government, checks and balances'],
+['NG','1999','Fourth Republic','d',3,[2,0,1,1],'After Abacha died in 1998, the military handed power to civilians. Olusegun Obasanjo won the 1999 election under a new constitution, beginning the longest stretch of civilian rule in Nigeria\'s history.','democratic transition, constitution'],
+['MX','2000','Fox defeats the PRI','d',3,[2,0,0,1],'Vicente Fox of the PAN won the presidency, ending about 71 years of PRI rule. The peaceful transfer of power to the opposition was a landmark for democratization.','alternation of power, party competition'],
+['NG','2006','Third-term bid blocked','d',2,[0,0,1,2],'President Obasanjo\'s allies tried to amend the constitution to allow a third term. The National Assembly rejected it in 2006, a sign that term limits and legislative checks could hold.','term limits, legislature, rule of law'],
+['MX','2002','Transparency law','d',1,[1,0,1,0],'Mexico passed a federal access-to-information law that let citizens request government records. It increased accountability and gave media and civil society new tools.','accountability, transparency'],
+['NG','2007','Flawed elections','b',-1,[-1,0,0,-1],'Umaru Yar\'Adua won the 2007 election in the first civilian-to-civilian handover, but observers reported serious fraud and violence. Even the winner admitted the vote had flaws.','election fraud, legitimacy'],
+['MX','2006','War on cartels','b',-2,[-1,-2,-1,-1],'President Calderón sent the military against drug cartels. Violence and human-rights abuses rose, and criminal groups challenged the state\'s monopoly on force and weakened the rule of law.','state sovereignty, rule of law, impunity'],
+['NG','2009','Boko Haram insurgency','b',-2,[-1,-2,0,0],'Boko Haram\'s insurgency in northeast Nigeria killed thousands and displaced millions. The government struggled to protect territory and citizens, which undermined its sovereignty.','sovereignty, insurgency, state capacity'],
+['MX','2014','Ayotzinapa','b',-2,[-1,0,0,-2],'Forty-three students disappeared in Iguala, Guerrero, with local police and officials implicated. The slow, disputed investigation showed corruption and impunity, though it triggered mass protests.','corruption, impunity, civil society'],
+['NG','2015','Opposition wins','d',3,[2,0,1,1],'Muhammadu Buhari defeated incumbent Goodluck Jonathan, and Jonathan conceded. It was the first time an incumbent lost and peacefully handed over power to the opposition.','alternation of power, consolidation'],
+['NG','2020','#EndSARS protests','d',1,[0,0,2,-1],'Young Nigerians organized nationwide protests against police brutality by the SARS unit. Civil society showed its strength, though security forces\' violent response at Lekki hurt rule of law.','civil society, police accountability'],
+['MX','2024','Judicial election reform','b',-2,[-1,0,0,-2],'A constitutional reform made judges elected by popular vote. Critics argue it threatens judicial independence and could concentrate power in the governing party.','judicial independence, separation of powers']];
+const CH=[
+['MX','1982','Debt crisis','b',-1,[-2,0,0,0],'Mexico\'s oil-fueled boom collapsed in the 1982 debt crisis, causing deep recession. The PRI could no longer deliver economic growth, weakening the performance legitimacy it relied on.','performance legitimacy, recession'],
+['MX','1994–95','Peso crisis','b',-1,[-2,0,0,0],'A sudden peso collapse after 1994 triggered a sharp recession. Voters blamed the PRI\'s economic management, which helped the opposition in later elections.','recession, performance legitimacy'],
+['NG','2014–16','Oil price crash','b',-1,[-1,0,0,-1],'As a rentier state dependent on oil revenue, Nigeria fell into recession in 2016 when oil prices collapsed. Less revenue limited the government\'s ability to fund services and patronage.','rentier state, clientelism'],
+['NG','2010','Electoral commission reforms','d',1,[1,0,0,1],'Attahiru Jega became head of the Independent National Electoral Commission (INEC) in 2010 and reformed voter registration. More credible elections followed, helping the 2015 transfer of power.','election administration, institutions'],
+['MX','2014','INE created','d',1,[0,0,1,1],'Mexico replaced the IFE with the National Electoral Institute (INE), which also oversees state-level elections. A nationally trusted referee strengthened electoral integrity.','electoral institutions'],
+['MX','2012','#YoSoy132 movement','d',1,[0,0,2,0],'University students protested media bias and demanded fair coverage of the 2012 election. The movement showed civil society pressuring both politicians and media.','civil society, media freedom']];
+const LAY=[{t:'S'}];let k=0;for(let i=1;i<=28;i++)LAY.push(i%5===0?{t:'C'}:{t:'E',e:E[k++]});LAY.push({t:'F'});
+let G=null,busy=false,rot=0;
+const tot=p=>p.s.reduce((a,b)=>a+b,0);
+function wheel(){let h='';const P=a=>[100+92*Math.sin(a*Math.PI/180),100-92*Math.cos(a*Math.PI/180)],cs=['#17324a','#1f8a5b','#c98d0a','#c43d34','#6a4fc4'];
+for(let i=0;i<5;i++){const a=P(i*72),b=P((i+1)*72),m=P((i+.5)*72),t=[100+62*Math.sin((i+.5)*1.2566),100-62*Math.cos((i+.5)*1.2566)];
+h+=`<path d="M100 100L${a[0]} ${a[1]}A92 92 0 0 1 ${b[0]} ${b[1]}Z" fill="${cs[i]}" stroke="#fff" stroke-width="2"/><text x="${t[0]}" y="${t[1]+9}" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">${i+1}</text>`}
+$('#wheel').innerHTML=h+'<circle cx="100" cy="100" r="10" fill="#fff"/>'}
+function render(){
+const cells=LAY.map((c,i)=>{const row=Math.floor(i/6),col=row%2?5-i%6:i%6,e=c.e,cls=c.t==='S'?'s':c.t==='F'?'f':c.t==='C'?'c':e[3];
+const ttl=c.t==='S'?'Authoritarian Government':c.t==='F'?'Democratic Consolidation':c.t==='C'?'Chance card':`${e[1]} ${e[2]}`;
+const mv=c.t==='E'?(e[4]>0?` ▲${e[4]}`:` ▼${-e[4]}`):'';const fl=c.t==='E'?(e[0]==='MX'?'🇲🇽':'🇳🇬'):'';
+const tk=(G?G.p.filter(p=>p.alive&&p.pos===i||p.pos===i&&i===F):[]).map(p=>`<span class="tk" style="background:${p.col}" title="${esc(p.name)}">${esc(p.name[0]||'?').toUpperCase()}</span>`).join('');
+return `<div class="cell ${cls}" style="grid-row:${5-row};grid-column:${col+1}"><b>${i}${fl?' '+fl:''}${mv}</b><span>${ttl}</span><div class="tks">${tk}</div></div>`}).join('');
+$('#board').innerHTML=cells;
+if(!G)return;
+$('#pls').innerHTML=G.p.map((p,i)=>`<div class="pl ${i===G.cur?'on':''} ${p.alive?'':'out'}"><h3><span class="tk" style="background:${p.col}">${esc(p.name[0]||'?').toUpperCase()}</span>${esc(p.name)}</h3><small>${REG[p.reg].n}${p.gate?' · hybrid regime, building institutions':''}${p.alive?'':' · regime collapsed'}</small>${p.s.map((v,j)=>`<div class="st"><span title="${ST[j]}">${IC[j]}</span><div class="bar" title="${ST[j]}"><i style="width:${v*10}%"></i></div><b>${v}</b></div>`).join('')}<div class="tot" title="Consolidation line"><i style="width:${tot(p)/40*100}%"></i><u style="left:${T/40*100}%"></u></div><small>Total ${tot(p)}/40 · consolidation at ${T}</small></div>`).join('');
+const c=G.p[G.cur];$('#who').textContent=c?`${c.name}'s turn`:'';$('#spin').disabled=busy||!c}
+function modal(html){$('#mc').innerHTML=html;$('#modal').hidden=false;$('#mc').scrollTop=0}
+function card(html,label,cb){modal(html+`<button class="big" id="go">${label}</button>`);$('#go').onclick=()=>{$('#modal').hidden=true;cb&&cb()}}
+function fx(ev){return `<div class="fx"><span class="${ev[4]>=0?'up':'dn'}">${ev[4]>0?'Move +'+ev[4]:ev[4]<0?'Move '+ev[4]:'Stay put'}</span>${ev[5].map((v,j)=>v?`<span class="${v>0?'up':'dn'}">${IC[j]} ${ST[j]} ${v>0?'+':''}${v}</span>`:'').join('')}</div>`}
+function evCard(ev,chance){return `<div>${chance?'<span class="pill c">Chance card</span> ':''}<span class="pill ${ev[3]}">${ev[3]==='d'?'↑ Democratization':'↓ Democratic backsliding'}</span><h2>${ev[2]}</h2><div style="color:var(--mut)">${FL[ev[0]]} · ${ev[1]}</div><p>${ev[6]}</p><div>${ev[7].split(', ').map(t=>`<span class="chip">${t}</span>`).join('')}</div>${fx(ev)}</div>`}
+async function walk(p,tgt){tgt=Math.max(0,tgt);const end=Math.min(tgt,F-1),d=end>p.pos?1:-1;while(p.pos!==end){p.pos+=d;render();await sleep(200)}
+if(tgt>=F){if(tot(p)>=T){p.pos=F;render();return'win'}p.gate=true;return'gate'}return'ok'}
+async function spin(){if(busy||!G)return;busy=true;$('#spin').disabled=true;const p=G.p[G.cur],v=1+Math.floor(Math.random()*5),c=(v-.5)*72;
+rot+=1440+(((-c-rot)%360)+360)%360;$('#wheel').style.transform=`rotate(${rot}deg)`;await sleep(2500);$('#res').textContent=`${p.name} spun a ${v}`;
+if(p.gate){let g=Math.ceil(v/2);for(let i=0;i<g;i++){let m=0;p.s.forEach((x,j)=>{if(x<p.s[m])m=j});if(p.s[m]<10)p.s[m]++}render();
+return card(`<span class="pill d">↑ Democratization</span><h2>Consolidation review</h2><p>${esc(p.name)} is close to consolidation but needs total ${T}. Each turn in this hybrid regime, institutions improve: the weakest areas gain ${g} point${g>1?'s':''}. Total is now ${tot(p)}.</p>`,'Continue',()=>tot(p)>=T?win(p):endTurn())}
+const r=await walk(p,p.pos+v);if(r==='win')return win(p);
+if(r==='gate')return card(`<span class="pill c">Final stretch</span><h2>Hybrid regime</h2><p>${esc(p.name)} reached the end of the road with only ${tot(p)} points. Consolidation needs ${T}. Elections happen, but institutions are not yet strong enough to survive without constant effort.</p>`,'Continue',endTurn);
+const sp=LAY[p.pos];if(sp.t==='S')return endTurn();
+const ev=sp.t==='C'?CH[Math.floor(Math.random()*CH.length)]:sp.e;
+card(evCard(ev,sp.t==='C'),'Apply effects',async()=>{ev[5].forEach((d,j)=>p.s[j]=Math.max(0,Math.min(10,p.s[j]+d)));render();
+if(tot(p)<=LOSE){p.alive=false;p.pos=p.pos;render();return card(`<span class="pill b">↓ Regime collapse</span><h2>${esc(p.name)} is out</h2><p>With only ${tot(p)} total points, the state lost legitimacy, control, and public support. The regime collapsed into instability or state failure.</p>`,'Continue',endTurn)}
+const r2=await walk(p,p.pos+ev[4]);if(r2==='win')return win(p);
+if(r2==='gate')return card(`<span class="pill c">Final stretch</span><h2>Hybrid regime</h2><p>${esc(p.name)} reached the end with ${tot(p)} points but needs ${T}. Build up institutions each turn.</p>`,'Continue',endTurn);endTurn()})}
+function endTurn(){busy=false;let n=G.cur;for(let i=0;i<G.p.length;i++){n=(n+1)%G.p.length;if(G.p[n].alive)break}
+if(!G.p.some(p=>p.alive)){render();return card('<h2>Every regime collapsed</h2><p>No state survived the road to democracy. Authoritarian breakdown does not guarantee democratic consolidation.</p>','New game',setup)}
+G.cur=n;if(!G.p[n].alive)return;render()}
+function win(p){busy=false;render();card(`<div style="font-size:3rem">🎉</div><span class="pill d">Democratic consolidation</span><h2>${esc(p.name)} wins!</h2><p>Starting as a ${REG[p.reg].n}, ${esc(p.name)} finished with ${tot(p)} of 40 points. Democracy is now "the only game in town": legitimate, accountable institutions, a strong civil society, and rule of law.</p>`,'Play again',setup)}
+function setup(){G=null;render();$('#spin').disabled=true;$('#who').textContent='Set up a game to begin';$('#pls').innerHTML='';
+modal(`<h2>Choose your regimes</h2><p>Each player starts in an authoritarian regime. Spin to move, build four scores, and reach Democratic Consolidation with ${T}+ total points. Fall to ${LOSE} or fewer and your regime collapses.</p><div class="row"><label for="np">Players</label><select id="np"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div><div id="rows"></div><button class="big" id="start">Start game</button>`);
+const rows=()=>{const n=+$('#np').value;$('#rows').innerHTML=[0,1,2,3].slice(0,n).map(i=>`<div class="row"><span class="tk" style="background:${COL[i]}">${i+1}</span><input id="n${i}" maxlength="12" placeholder="Player ${i+1}" aria-label="Player ${i+1} name"><select id="r${i}" aria-label="Regime">${Object.entries(REG).map(([k,r])=>`<option value="${k}">${r.n} (${r.e})</option>`).join('')}</select></div>`).join('')};
+rows();$('#np').onchange=rows;
+$('#start').onclick=()=>{const n=+$('#np').value;G={cur:0,p:[...Array(n).keys()].map(i=>{const reg=$('#r'+i).value;return{name:($('#n'+i).value.trim()||'Player '+(i+1)),reg,s:[...REG[reg].s],pos:0,alive:true,gate:false,col:COL[i]}})};busy=false;$('#modal').hidden=true;$('#res').textContent='';render()}}
+function rules(){modal(`<h2>How to play</h2><p><b>Goal:</b> move from <i>Authoritarian Government</i> to <i>Democratic Consolidation</i> and have at least ${T} of 40 total points.</p><p><b>Spin</b> the wheel (1–5) to move. Land on a space and a real event from Mexico or Nigeria happens. Democratization events move you forward and raise your scores; backsliding events move you back and lower them. Chance cards (recessions, reforms, protests) are also drawn from Mexican and Nigerian history. There is no money, only political strength.</p><p><b>Four scores (0–10 each):</b> 🏛️ Legitimacy (people accept the government's right to rule), 🛡️ Sovereignty (the state's control over its territory and policy), 🤝 Civil Society (independent groups, media, and protest), ⚖️ Rule of Law (everyone, including leaders, follows the law).</p><p><b>Lose:</b> total of ${LOSE} or less means regime collapse. <b>Reach the end early?</b> If you have under ${T}, you are a hybrid regime and gain points each turn until consolidated.</p><button class="big" id="go">Got it</button>`);$('#go').onclick=()=>$('#modal').hidden=true}
+function index(){const li=a=>a.map(e=>`<h3>${FL[e[0]].slice(0,2)} ${e[1]}: ${e[2]} <span class="pill ${e[3]}" style="font-size:.7rem">${e[3]==='d'?'Democratization':'Backsliding'}</span></h3><p>${e[6]}</p>`).join('');
+modal(`<div class="ix"><h2>Event index</h2><p>Every board space is based on a specific event, institution, or group from our course countries. Each entry explains how it contributes to democratization or democratic backsliding.</p>${li(LAY.filter(c=>c.e).map(c=>c.e))}<h2 style="margin-top:16px">Chance cards</h2>${li(CH)}<h2 style="margin-top:16px">Works cited</h2><p>College Board. <i>AP Comparative Government and Politics Course and Exam Description</i>. Unit 1.</p><p><i>Nigeria: A Modern History, 1861–2023</i>. Class reading.</p><p>Class notes and annotated readings: "Democratization in Mexico and Nigeria Class Notes."</p></div><button class="big" id="go">Close</button>`);$('#go').onclick=()=>$('#modal').hidden=true}
+$('#spin').onclick=spin;$('#bR').onclick=rules;$('#bI').onclick=index;wheel();setup();
+</script></body></html>
